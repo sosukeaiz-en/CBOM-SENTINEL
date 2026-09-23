@@ -37,7 +37,7 @@ export default function Background() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Grid
-      ctx.strokeStyle = "rgba(34, 211, 238, 0.03)";
+      ctx.strokeStyle = "rgba(245, 158, 11, 0.03)";
       ctx.lineWidth = 0.5;
       const gridSize = 60;
       for (let x = 0; x < canvas.width; x += gridSize) {
@@ -62,7 +62,7 @@ export default function Background() {
         canvas.height * 0.3,
         canvas.width * 0.4
       );
-      g1.addColorStop(0, "rgba(34, 211, 238, 0.04)");
+      g1.addColorStop(0, "rgba(245, 158, 11, 0.04)");
       g1.addColorStop(1, "transparent");
       ctx.fillStyle = g1;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -75,7 +75,7 @@ export default function Background() {
         canvas.height * 0.6,
         canvas.width * 0.35
       );
-      g2.addColorStop(0, "rgba(139, 92, 246, 0.04)");
+      g2.addColorStop(0, "rgba(16, 185, 129, 0.04)");
       g2.addColorStop(1, "transparent");
       ctx.fillStyle = g2;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -92,7 +92,7 @@ export default function Background() {
         const pulse = Math.sin(t * 2 + node.phase) * 0.3 + 0.7;
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.r * pulse, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(34, 211, 238, ${node.opacity * pulse})`;
+        ctx.fillStyle = `rgba(245, 158, 11, ${node.opacity * pulse})`;
         ctx.fill();
       });
 
@@ -103,7 +103,7 @@ export default function Background() {
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 120) {
-            ctx.strokeStyle = `rgba(34, 211, 238, ${(1 - dist / 120) * 0.06})`;
+            ctx.strokeStyle = `rgba(245, 158, 11, ${(1 - dist / 120) * 0.06})`;
             ctx.lineWidth = 0.5;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
@@ -117,7 +117,7 @@ export default function Background() {
       const scanY = ((Math.sin(t * 0.15) + 1) / 2) * canvas.height;
       const sg = ctx.createLinearGradient(0, scanY - 2, 0, scanY + 2);
       sg.addColorStop(0, "transparent");
-      sg.addColorStop(0.5, "rgba(34, 211, 238, 0.06)");
+      sg.addColorStop(0.5, "rgba(245, 158, 11, 0.06)");
       sg.addColorStop(1, "transparent");
       ctx.fillStyle = sg;
       ctx.fillRect(0, scanY - 2, canvas.width, 4);

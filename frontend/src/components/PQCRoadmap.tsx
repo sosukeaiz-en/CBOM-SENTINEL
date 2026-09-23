@@ -63,8 +63,8 @@ const FALLBACK_STANDARDS: PQCStandard[] = [
 ];
 
 const STD_COLORS: Record<string, string> = {
-  "ml-kem": "#22D3EE",
-  "ml-dsa": "#8B5CF6",
+  "ml-kem": "#F59E0B",
+  "ml-dsa": "#10B981",
   "slh-dsa": "#3B82F6",
   falcon: "#F59E0B",
 };
@@ -112,7 +112,7 @@ function NistCard({
           ? `2px solid ${color}70`
           : isSelected
           ? `1px solid ${color}45`
-          : "1px solid rgba(34,211,238,0.09)",
+          : "1px solid rgba(245,158,11,0.09)",
         boxShadow: isHighlighted ? `0 0 30px ${color}18` : "none",
         outline: "none",
       }}
@@ -122,7 +122,7 @@ function NistCard({
       }}
       onMouseLeave={(e) => {
         if (!isSelected && !isHighlighted)
-          (e.currentTarget as HTMLElement).style.borderColor = "rgba(34,211,238,0.09)";
+          (e.currentTarget as HTMLElement).style.borderColor = "rgba(245,158,11,0.09)";
       }}
       tabIndex={0}
       onKeyDown={(e) => e.key === "Enter" && onClick()}
@@ -176,7 +176,7 @@ function NistCard({
                   {standard.description}
                 </p>
                 <div>
-                  <div className="font-mono text-xs mb-1.5" style={{ color: "rgba(34,211,238,0.5)" }}>VARIANTS</div>
+                  <div className="font-mono text-xs mb-1.5" style={{ color: "rgba(245,158,11,0.5)" }}>VARIANTS</div>
                   <div className="flex flex-wrap gap-1.5">
                     {standard.variants.map((v) => (
                       <span
@@ -194,8 +194,8 @@ function NistCard({
                   </div>
                 </div>
                 {standard.hybrid_mode && (
-                  <div className="rounded-xl p-3" style={{ background: "rgba(7,11,20,0.6)", border: "1px solid rgba(34,211,238,0.07)" }}>
-                    <div className="font-mono text-xs mb-1" style={{ color: "rgba(34,211,238,0.5)" }}>HYBRID MODE</div>
+                  <div className="rounded-xl p-3" style={{ background: "rgba(7,11,20,0.6)", border: "1px solid rgba(245,158,11,0.07)" }}>
+                    <div className="font-mono text-xs mb-1" style={{ color: "rgba(245,158,11,0.5)" }}>HYBRID MODE</div>
                     <div className="font-mono text-sm" style={{ color: "#E2E8F0" }}>{standard.hybrid_mode}</div>
                   </div>
                 )}
@@ -287,12 +287,12 @@ export default function PQCRoadmap() {
         <p className="mt-1 text-sm mb-5" style={{ color: "rgba(148,163,184,0.6)" }}>
           From vulnerable classical cryptography to quantum-resistant infrastructure
           {state.selectedAlgorithm && (
-            <span style={{ color: "#22D3EE" }}>
+            <span style={{ color: "#F59E0B" }}>
               {" "}— filtered for <strong>{state.selectedAlgorithm}</strong>
               <button
                 onClick={() => selectAlgorithm(null)}
                 className="ml-2 text-xs underline"
-                style={{ color: "rgba(34,211,238,0.5)" }}
+                style={{ color: "rgba(245,158,11,0.5)" }}
                 aria-label="Clear algorithm filter"
               >
                 clear
@@ -301,7 +301,7 @@ export default function PQCRoadmap() {
           )}
         </p>
         {loadingStds && (
-          <div className="font-mono text-xs mb-3" style={{ color: "rgba(34,211,238,0.4)" }}>
+          <div className="font-mono text-xs mb-3" style={{ color: "rgba(245,158,11,0.4)" }}>
             Loading standards…
           </div>
         )}
@@ -312,7 +312,7 @@ export default function PQCRoadmap() {
             { label: "CURRENT CRYPTO", desc: "Classical algorithms", color: "#EF4444" },
             { label: "IDENTIFY", desc: "CBOM scanning", color: "#F97316" },
             { label: "PRIORITIZE", desc: "Risk classification", color: "#F59E0B" },
-            { label: "HYBRID DEPLOY", desc: "Classical + PQC", color: "#8B5CF6" },
+            { label: "HYBRID DEPLOY", desc: "Classical + PQC", color: "#10B981" },
             { label: "PQC READY", desc: "Full quantum safety", color: "#10B981" },
           ].map((step, i, arr) => (
             <div key={step.label} className="flex items-center flex-shrink-0">
@@ -346,7 +346,7 @@ export default function PQCRoadmap() {
         {/* Standard cards */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {standards.map((std) => {
-            const color = STD_COLORS[std.id] ?? "#22D3EE";
+            const color = STD_COLORS[std.id] ?? "#F59E0B";
             return (
               <NistCard
                 key={std.id}
@@ -368,7 +368,7 @@ export default function PQCRoadmap() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="panel p-5 space-y-4"
         >
-          <div className="font-mono text-xs font-semibold tracking-widest" style={{ color: "rgba(34,211,238,0.6)" }}>
+          <div className="font-mono text-xs font-semibold tracking-widest" style={{ color: "rgba(245,158,11,0.6)" }}>
             {state.report ? "MIGRATION PATHS" : "MIGRATION EXAMPLES"}
           </div>
 
@@ -407,14 +407,14 @@ export default function PQCRoadmap() {
                     whileInView={{ scaleY: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: reduced ? 0 : 0.3, delay: i * 0.07 + 0.2 }}
-                    style={{ background: `linear-gradient(180deg, ${path.riskColor}60, rgba(34,211,238,0.4))` }}
+                    style={{ background: `linear-gradient(180deg, ${path.riskColor}60, rgba(245,158,11,0.4))` }}
                   />
                 </div>
                 {/* PQC */}
                 <div className="flex justify-center">
                   <span
                     className="px-3 py-1.5 rounded-xl font-mono text-xs font-semibold"
-                    style={{ background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.25)", color: "#22D3EE" }}
+                    style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.25)", color: "#F59E0B" }}
                   >
                     {path.pqc}
                   </span>
@@ -423,7 +423,7 @@ export default function PQCRoadmap() {
                 {path.hybrid !== "Direct replacement" && path.hybrid !== "Increase key size" && (
                   <>
                     <div className="flex justify-center">
-                      <div className="w-px h-3 origin-top" style={{ background: "rgba(34,211,238,0.2)" }} />
+                      <div className="w-px h-3 origin-top" style={{ background: "rgba(245,158,11,0.2)" }} />
                     </div>
                     <div className="text-center font-mono text-xs" style={{ color: "rgba(148,163,184,0.35)" }}>
                       Hybrid: {path.hybrid}

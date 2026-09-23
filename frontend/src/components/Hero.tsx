@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from "recharts";
 import { scanRepo, scanUpload } from "../api";
 import { useAppState } from "../context/AppContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -25,19 +26,19 @@ function ShieldIcon() {
       />
       <path
         d="M9 12l2.5 2.5L15.5 9"
-        stroke="#22D3EE"
+        stroke="#F59E0B"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <defs>
         <linearGradient id="sh-grad" x1="4" y1="2" x2="20" y2="24" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#22D3EE" />
-          <stop offset="1" stopColor="#8B5CF6" />
+          <stop stopColor="#F59E0B" />
+          <stop offset="1" stopColor="#10B981" />
         </linearGradient>
         <linearGradient id="sh-fill" x1="4" y1="2" x2="20" y2="24" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#22D3EE" stopOpacity="0.1" />
-          <stop offset="1" stopColor="#8B5CF6" stopOpacity="0.06" />
+          <stop stopColor="#F59E0B" stopOpacity="0.1" />
+          <stop offset="1" stopColor="#10B981" stopOpacity="0.06" />
         </linearGradient>
       </defs>
     </svg>
@@ -81,7 +82,7 @@ export default function Hero() {
     if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
   }, [localLogs]);
 
-  // Phase cycling during scan
+  // Fast-scrolling Hollywood terminal effect during scan
   useEffect(() => {
     if (!isScanning) {
       if (phaseTimerRef.current) clearInterval(phaseTimerRef.current);
@@ -91,18 +92,32 @@ export default function Hero() {
     setPhaseIndex(0);
     setElapsed(0);
     elapsedTimerRef.current = setInterval(() => setElapsed((e) => e + 1), 1000);
+    
+    // Fake file stream for terminal
+    const fileTypes = ["java", "py", "js", "ts", "go", "c"];
+    const folders = ["src/auth", "src/crypto", "api/routes", "internal/core", "utils"];
+    const vulns = ["[OK]", "[OK]", "[OK]", "[VULNERABILITY: RSA-2048]", "[VULNERABILITY: MD5]", "[OK]"];
+    
     phaseTimerRef.current = setInterval(() => {
-      setPhaseIndex((i) => Math.min(i + 1, SCAN_PHASES.length - 1));
-      setLocalLogs((prev) => [
-        ...prev,
-        `→ ${SCAN_PHASES[Math.min(prev.length, SCAN_PHASES.length - 1)]}`,
-      ]);
-    }, 1800);
+      // Advance phase slowly
+      setPhaseIndex((i) => Math.min(Math.floor(elapsed / 2), SCAN_PHASES.length - 1));
+      
+      // Push rapid file logs
+      const folder = folders[Math.floor(Math.random() * folders.length)];
+      const file = `file_${Math.floor(Math.random() * 9999)}.${fileTypes[Math.floor(Math.random() * fileTypes.length)]}`;
+      const status = vulns[Math.floor(Math.random() * vulns.length)];
+      
+      setLocalLogs((prev) => {
+        const next = [...prev, `> Parsing ${folder}/${file}... ${status}`];
+        return next.length > 50 ? next.slice(next.length - 50) : next; // keep log size manageable
+      });
+    }, 80); // ultra fast 80ms interval
+
     return () => {
       clearInterval(phaseTimerRef.current!);
       clearInterval(elapsedTimerRef.current!);
     };
-  }, [isScanning]);
+  }, [isScanning, elapsed]);
 
   const handleFile = useCallback((file: File) => {
     if (!file.name.endsWith(".zip") && file.type !== "application/zip") {
@@ -223,10 +238,10 @@ export default function Hero() {
             style={{
               background: "rgba(11,18,32,0.9)",
               border: isScanning
-                ? "1px solid rgba(34,211,238,0.4)"
-                : "1px solid rgba(34,211,238,0.18)",
+                ? "1px solid rgba(245,158,11,0.4)"
+                : "1px solid rgba(245,158,11,0.18)",
               boxShadow: isScanning
-                ? "0 0 0 1px rgba(34,211,238,0.3), 0 0 60px rgba(34,211,238,0.1)"
+                ? "0 0 0 1px rgba(245,158,11,0.3), 0 0 60px rgba(245,158,11,0.1)"
                 : "0 20px 60px rgba(0,0,0,0.5)",
               transition: "border-color 0.4s, box-shadow 0.4s",
             }}
@@ -234,7 +249,7 @@ export default function Hero() {
             {/* Window chrome */}
             <div
               className="flex items-center justify-between px-4 py-2.5"
-              style={{ background: "rgba(7,11,20,0.7)", borderBottom: "1px solid rgba(34,211,238,0.09)" }}
+              style={{ background: "rgba(7,11,20,0.7)", borderBottom: "1px solid rgba(245,158,11,0.09)" }}
             >
               <div className="flex items-center gap-3">
                 <div className="flex gap-1.5">
@@ -242,7 +257,7 @@ export default function Hero() {
                   <div className="w-2.5 h-2.5 rounded-full bg-amber-400/60" />
                   <div className="w-2.5 h-2.5 rounded-full bg-green-400/60" />
                 </div>
-                <span className="font-mono text-xs tracking-widest" style={{ color: "rgba(34,211,238,0.7)" }}>
+                <span className="font-mono text-xs tracking-widest" style={{ color: "rgba(245,158,11,0.7)" }}>
                   CODEBASE SCANNER
                 </span>
               </div>
@@ -250,8 +265,8 @@ export default function Hero() {
                 <div
                   className="w-1.5 h-1.5 rounded-full"
                   style={{
-                    background: isScanning ? "#22D3EE" : isDone ? "#10B981" : "rgba(148,163,184,0.4)",
-                    boxShadow: isScanning ? "0 0 6px #22D3EE" : "none",
+                    background: isScanning ? "#F59E0B" : isDone ? "#10B981" : "rgba(148,163,184,0.4)",
+                    boxShadow: isScanning ? "0 0 6px #F59E0B" : "none",
                     animation: isScanning && !reduced ? "pulse-glow 1s infinite" : "none",
                   }}
                 />
@@ -273,10 +288,10 @@ export default function Hero() {
                     onClick={() => handleModeSwitch(mode)}
                     className="px-3 py-1.5 text-xs font-mono tracking-wider rounded transition-all duration-200 focus:outline-none focus-visible:ring-2"
                     style={{
-                      background: scanMode === mode ? "rgba(34,211,238,0.12)" : "transparent",
-                      border: scanMode === mode ? "1px solid rgba(34,211,238,0.35)" : "1px solid rgba(148,163,184,0.12)",
-                      color: scanMode === mode ? "#22D3EE" : "rgba(148,163,184,0.45)",
-                      "--tw-ring-color": "#22D3EE",
+                      background: scanMode === mode ? "rgba(245,158,11,0.12)" : "transparent",
+                      border: scanMode === mode ? "1px solid rgba(245,158,11,0.35)" : "1px solid rgba(148,163,184,0.12)",
+                      color: scanMode === mode ? "#F59E0B" : "rgba(148,163,184,0.45)",
+                      "--tw-ring-color": "#F59E0B",
                     } as React.CSSProperties}
                   >
                     {mode === "repository" ? "LOCAL REPOSITORY" : "UPLOAD ZIP"}
@@ -290,7 +305,7 @@ export default function Hero() {
                   <label
                     htmlFor="repo-input"
                     className="block font-mono text-xs mb-1.5"
-                    style={{ color: "rgba(34,211,238,0.5)" }}
+                    style={{ color: "rgba(245,158,11,0.5)" }}
                   >
                     REPOSITORY PATH
                   </label>
@@ -298,10 +313,10 @@ export default function Hero() {
                     className="flex items-center gap-2 rounded-xl px-3 py-2.5"
                     style={{
                       background: "rgba(7,11,20,0.8)",
-                      border: inputError ? "1px solid rgba(239,68,68,0.5)" : "1px solid rgba(34,211,238,0.15)",
+                      border: inputError ? "1px solid rgba(239,68,68,0.5)" : "1px solid rgba(245,158,11,0.15)",
                     }}
                   >
-                    <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "rgba(34,211,238,0.4)" }}>
+                    <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "rgba(245,158,11,0.4)" }}>
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                     </svg>
                     <input
@@ -316,7 +331,7 @@ export default function Hero() {
                       aria-invalid={!!inputError}
                       aria-describedby={inputError ? "input-error" : undefined}
                       className="flex-1 bg-transparent outline-none font-mono text-sm"
-                      style={{ color: "#E2E8F0", caretColor: "#22D3EE" }}
+                      style={{ color: "#E2E8F0", caretColor: "#F59E0B" }}
                     />
                   </div>
                 </div>
@@ -325,18 +340,18 @@ export default function Hero() {
               {/* ZIP upload */}
               {scanMode === "upload" && (
                 <div>
-                  <div className="font-mono text-xs mb-1.5" style={{ color: "rgba(34,211,238,0.5)" }}>
+                  <div className="font-mono text-xs mb-1.5" style={{ color: "rgba(245,158,11,0.5)" }}>
                     ZIP ARCHIVE
                   </div>
                   <div
                     className="rounded-xl p-4 transition-all duration-200 cursor-pointer"
                     style={{
-                      background: dragOver ? "rgba(34,211,238,0.06)" : "rgba(7,11,20,0.8)",
+                      background: dragOver ? "rgba(245,158,11,0.06)" : "rgba(7,11,20,0.8)",
                       border: dragOver
-                        ? "1px dashed rgba(34,211,238,0.6)"
+                        ? "1px dashed rgba(245,158,11,0.6)"
                         : inputError
                         ? "1px dashed rgba(239,68,68,0.5)"
-                        : "1px dashed rgba(34,211,238,0.2)",
+                        : "1px dashed rgba(245,158,11,0.2)",
                     }}
                     role="button"
                     tabIndex={0}
@@ -357,8 +372,8 @@ export default function Hero() {
                     />
                     {selectedFile ? (
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg" style={{ background: "rgba(34,211,238,0.1)" }}>
-                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#22D3EE">
+                        <div className="p-2 rounded-lg" style={{ background: "rgba(245,158,11,0.1)" }}>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="#F59E0B">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                           </svg>
                         </div>
@@ -379,7 +394,7 @@ export default function Hero() {
                       </div>
                     ) : (
                       <div className="text-center py-2">
-                        <div className="font-mono text-xs mb-1" style={{ color: "rgba(34,211,238,0.6)" }}>
+                        <div className="font-mono text-xs mb-1" style={{ color: "rgba(245,158,11,0.6)" }}>
                           DROP ZIP HERE
                         </div>
                         <div className="text-xs" style={{ color: "rgba(148,163,184,0.35)" }}>
@@ -423,15 +438,15 @@ export default function Hero() {
               {isScanning && (
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs" style={{ color: "rgba(34,211,238,0.7)" }}>
+                    <span className="font-mono text-xs" style={{ color: "rgba(245,158,11,0.7)" }}>
                       {SCAN_PHASES[phaseIndex]}
                     </span>
                     <span className="font-mono text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>{elapsed}s</span>
                   </div>
-                  <div className="h-0.5 rounded-full overflow-hidden" style={{ background: "rgba(34,211,238,0.1)" }}>
+                  <div className="h-0.5 rounded-full overflow-hidden" style={{ background: "rgba(245,158,11,0.1)" }}>
                     <motion.div
                       className="h-full rounded-full"
-                      style={{ background: "linear-gradient(90deg, #22D3EE, #8B5CF6)" }}
+                      style={{ background: "linear-gradient(90deg, #F59E0B, #10B981)" }}
                       animate={{ width: `${((phaseIndex + 1) / SCAN_PHASES.length) * 100}%` }}
                       transition={{ duration: 0.8 }}
                     />
@@ -446,7 +461,7 @@ export default function Hero() {
                   className="rounded-lg p-3 space-y-0.5 overflow-y-auto"
                   style={{
                     background: "rgba(7,11,20,0.85)",
-                    border: "1px solid rgba(34,211,238,0.07)",
+                    border: "1px solid rgba(245,158,11,0.07)",
                     maxHeight: "100px",
                     fontFamily: "'JetBrains Mono', monospace",
                     fontSize: "10px",
@@ -467,7 +482,7 @@ export default function Hero() {
                       {log}
                     </div>
                   ))}
-                  {isScanning && <div className="text-cyan-400 animate-pulse">▊</div>}
+                  {isScanning && <div className="text-amber-400 animate-pulse">▊</div>}
                 </div>
               )}
 
@@ -492,18 +507,54 @@ export default function Hero() {
                       </span>
                     </div>
                     {state.scanStatus === "success" && (
-                      <div className="grid grid-cols-2 gap-2">
-                        {[
-                          { label: "ARTIFACTS", value: state.report.summary.total_artifacts, color: "#E2E8F0" },
-                          { label: "QUANTUM VULN", value: state.report.summary.vulnerable_count, color: "#F97316" },
-                          { label: "CRITICAL", value: state.report.summary.critical_count, color: "#EF4444" },
-                          { label: "PROJECT", value: state.report.project_name, color: "#22D3EE" },
-                        ].map((s) => (
-                          <div key={s.label} className="text-center">
-                            <div className="font-mono text-base font-bold" style={{ color: s.color }}>{s.value}</div>
-                            <div className="font-mono text-xs" style={{ color: "rgba(148,163,184,0.4)" }}>{s.label}</div>
-                          </div>
-                        ))}
+                      <div className="flex flex-col gap-4">
+                        <div className="h-32 w-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={[
+                                  { name: "Safe Artifacts", value: state.report.summary.total_artifacts - state.report.summary.vulnerable_count, color: "#10B981" },
+                                  { name: "Vulnerable", value: state.report.summary.vulnerable_count - state.report.summary.critical_count, color: "#F97316" },
+                                  { name: "Critical", value: state.report.summary.critical_count, color: "#EF4444" }
+                                ]}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={35}
+                                outerRadius={50}
+                                paddingAngle={2}
+                                dataKey="value"
+                                animationBegin={200}
+                                animationDuration={800}
+                              >
+                                {
+                                  [
+                                    { color: "#10B981" },
+                                    { color: "#F97316" },
+                                    { color: "#EF4444" }
+                                  ].map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                  ))
+                                }
+                              </Pie>
+                              <RechartsTooltip 
+                                contentStyle={{ backgroundColor: "rgba(11,18,32,0.9)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: "8px", fontSize: "12px", fontFamily: "monospace" }}
+                                itemStyle={{ color: "#E2E8F0" }}
+                              />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 border-t border-amber-500/10 pt-3">
+                          {[
+                            { label: "ARTIFACTS", value: state.report.summary.total_artifacts, color: "#E2E8F0" },
+                            { label: "VULN", value: state.report.summary.vulnerable_count, color: "#F97316" },
+                            { label: "CRITICAL", value: state.report.summary.critical_count, color: "#EF4444" },
+                          ].map((s) => (
+                            <div key={s.label} className="text-center">
+                              <div className="font-mono text-lg font-bold" style={{ color: s.color }}>{s.value}</div>
+                              <div className="font-mono text-[10px] tracking-wider" style={{ color: "rgba(148,163,184,0.5)" }}>{s.label}</div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </motion.div>
@@ -526,7 +577,7 @@ export default function Hero() {
                       <button
                         onClick={runScan}
                         className="px-3 py-1.5 rounded-lg font-mono text-xs transition-colors"
-                        style={{ background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.25)", color: "#22D3EE" }}
+                        style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.25)", color: "#F59E0B" }}
                       >
                         Retry
                       </button>
@@ -547,20 +598,20 @@ export default function Hero() {
                 onClick={runScan}
                 disabled={isScanning}
                 aria-busy={isScanning}
-                className="w-full py-3 rounded-xl font-semibold text-sm tracking-widest transition-all duration-300 relative overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="w-full py-3 rounded-xl font-semibold text-sm tracking-widest transition-all duration-300 relative overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
                 style={{
                   background: isScanning
-                    ? "rgba(34,211,238,0.04)"
-                    : "linear-gradient(135deg, rgba(34,211,238,0.14), rgba(139,92,246,0.14))",
-                  border: "1px solid rgba(34,211,238,0.28)",
-                  color: isScanning ? "rgba(34,211,238,0.4)" : "#22D3EE",
+                    ? "rgba(245,158,11,0.04)"
+                    : "linear-gradient(135deg, rgba(245,158,11,0.14), rgba(16,185,129,0.14))",
+                  border: "1px solid rgba(245,158,11,0.28)",
+                  color: isScanning ? "rgba(245,158,11,0.4)" : "#F59E0B",
                   letterSpacing: "0.14em",
                   cursor: isScanning ? "not-allowed" : "pointer",
                 }}
               >
                 {isScanning ? (
                   <span className="flex items-center justify-center gap-2">
-                    <span className="w-3 h-3 rounded-full border border-cyan-400 border-t-transparent animate-spin" />
+                    <span className="w-3 h-3 rounded-full border border-amber-400 border-t-transparent animate-spin" />
                     SCANNING…
                   </span>
                 ) : isDone ? (
@@ -597,10 +648,10 @@ export default function Hero() {
           <div>
             <div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
-              style={{ background: "rgba(34,211,238,0.05)", border: "1px solid rgba(34,211,238,0.15)" }}
+              style={{ background: "rgba(245,158,11,0.05)", border: "1px solid rgba(245,158,11,0.15)" }}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" style={{ boxShadow: "0 0 6px #22D3EE" }} />
-              <span className="font-mono text-xs tracking-widest" style={{ color: "rgba(34,211,238,0.75)" }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: "0 0 6px #F59E0B" }} />
+              <span className="font-mono text-xs tracking-widest" style={{ color: "rgba(245,158,11,0.75)" }}>
                 POST-QUANTUM SECURITY INTELLIGENCE
               </span>
             </div>
@@ -622,7 +673,7 @@ export default function Hero() {
 
             <p className="text-xl font-light mt-6 leading-relaxed" style={{ color: "rgba(226,232,240,0.85)" }}>
               Find the cryptography that won't survive the{" "}
-              <span className="font-semibold" style={{ color: "#22D3EE", textShadow: "0 0 18px rgba(34,211,238,0.35)" }}>
+              <span className="font-semibold" style={{ color: "#F59E0B", textShadow: "0 0 18px rgba(245,158,11,0.35)" }}>
                 quantum era
               </span>
               .

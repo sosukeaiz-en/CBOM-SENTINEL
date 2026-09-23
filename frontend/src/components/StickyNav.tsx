@@ -52,7 +52,7 @@ export default function StickyNav() {
         style={{
           background: "rgba(7, 11, 20, 0.85)",
           backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(34, 211, 238, 0.1)",
+          borderBottom: "1px solid rgba(245, 158, 11, 0.1)",
         }}
       />
       <div className="relative flex items-center gap-3">
@@ -60,11 +60,11 @@ export default function StickyNav() {
           <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5">
             <path
               d="M12 2L4 6v6c0 5.25 3.5 10.15 8 11.5C16.5 22.15 20 17.25 20 12V6L12 2z"
-              stroke="#22D3EE"
+              stroke="#F59E0B"
               strokeWidth="1.5"
-              fill="rgba(34,211,238,0.1)"
+              fill="rgba(245,158,11,0.1)"
             />
-            <path d="M9 12l2 2 4-4" stroke="#22D3EE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M9 12l2 2 4-4" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
         <span className="text-sm font-semibold tracking-widest text-white" style={{ letterSpacing: "0.2em" }}>
@@ -79,7 +79,7 @@ export default function StickyNav() {
             onClick={() => scrollTo(item.id)}
             className="relative px-3 py-1.5 text-xs tracking-widest transition-colors duration-200 rounded"
             style={{
-              color: activeSection === item.id ? "#22D3EE" : "rgba(148, 163, 184, 0.8)",
+              color: activeSection === item.id ? "#F59E0B" : "rgba(148, 163, 184, 0.8)",
               letterSpacing: "0.12em",
               fontFamily: "'JetBrains Mono', monospace",
             }}
@@ -88,7 +88,7 @@ export default function StickyNav() {
               <motion.div
                 layoutId="nav-indicator"
                 className="absolute inset-0 rounded"
-                style={{ background: "rgba(34, 211, 238, 0.08)", border: "1px solid rgba(34, 211, 238, 0.25)" }}
+                style={{ background: "rgba(245, 158, 11, 0.08)", border: "1px solid rgba(245, 158, 11, 0.25)" }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
               />
             )}
@@ -127,16 +127,16 @@ export default function StickyNav() {
           }}
           className="px-4 py-1.5 text-xs font-semibold tracking-widest rounded transition-all duration-200"
           style={{
-            background: "rgba(34, 211, 238, 0.1)",
-            border: "1px solid rgba(34, 211, 238, 0.3)",
-            color: "#22D3EE",
+            background: "rgba(245, 158, 11, 0.1)",
+            border: "1px solid rgba(245, 158, 11, 0.3)",
+            color: "#F59E0B",
             letterSpacing: "0.12em",
           }}
           onMouseEnter={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "rgba(34, 211, 238, 0.18)";
+            (e.currentTarget as HTMLButtonElement).style.background = "rgba(245, 158, 11, 0.18)";
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "rgba(34, 211, 238, 0.1)";
+            (e.currentTarget as HTMLButtonElement).style.background = "rgba(245, 158, 11, 0.1)";
           }}
         >
           NEW SCAN

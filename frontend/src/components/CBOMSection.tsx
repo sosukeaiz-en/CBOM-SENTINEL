@@ -95,21 +95,21 @@ function DetailDrawer({ finding, onClose, triggerRef }: {
       className="fixed right-0 top-0 bottom-0 w-full max-w-lg z-50 flex flex-col overflow-y-auto"
       style={{
         background: "rgba(7,11,20,0.97)",
-        borderLeft: "1px solid rgba(34,211,238,0.14)",
+        borderLeft: "1px solid rgba(245,158,11,0.14)",
         backdropFilter: "blur(20px)",
         boxShadow: "-20px 0 60px rgba(0,0,0,0.6)",
       }}
     >
-      <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(34,211,238,0.08)" }}>
+      <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(245,158,11,0.08)" }}>
         <div>
-          <div className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(34,211,238,0.5)" }}>FINDING DETAIL</div>
+          <div className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(245,158,11,0.5)" }}>FINDING DETAIL</div>
           <div className="font-mono text-lg font-bold text-white">{finding.algorithm}</div>
         </div>
         <button
           ref={closeRef}
           onClick={onClose}
           aria-label="Close detail panel"
-          className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
           style={{ background: "rgba(148,163,184,0.08)", color: "rgba(148,163,184,0.6)" }}
         >
           ✕
@@ -138,25 +138,25 @@ function DetailDrawer({ finding, onClose, triggerRef }: {
             { label: "CLASSICAL BITS", value: finding.classical_security_bits ? `${finding.classical_security_bits}-bit` : "—", mono: true },
             { label: "PQC CATEGORY", value: finding.pqc_category },
           ].map((item) => (
-            <div key={item.label} className="rounded-xl p-3" style={{ background: "rgba(11,18,32,0.8)", border: "1px solid rgba(34,211,238,0.07)" }}>
-              <div className="font-mono text-xs mb-1" style={{ color: "rgba(34,211,238,0.45)" }}>{item.label}</div>
+            <div key={item.label} className="rounded-xl p-3" style={{ background: "rgba(11,18,32,0.8)", border: "1px solid rgba(245,158,11,0.07)" }}>
+              <div className="font-mono text-xs mb-1" style={{ color: "rgba(245,158,11,0.45)" }}>{item.label}</div>
               <div className={`text-sm truncate ${item.mono ? "font-mono" : ""}`} style={{ color: "#E2E8F0" }} title={String(item.value)}>{item.value}</div>
             </div>
           ))}
         </div>
 
         {finding.notes && (
-          <div className="rounded-xl p-4" style={{ background: "rgba(11,18,32,0.8)", border: "1px solid rgba(34,211,238,0.07)" }}>
-            <div className="font-mono text-xs mb-2" style={{ color: "rgba(34,211,238,0.45)" }}>ANALYSIS NOTES</div>
+          <div className="rounded-xl p-4" style={{ background: "rgba(11,18,32,0.8)", border: "1px solid rgba(245,158,11,0.07)" }}>
+            <div className="font-mono text-xs mb-2" style={{ color: "rgba(245,158,11,0.45)" }}>ANALYSIS NOTES</div>
             <p className="text-sm leading-relaxed" style={{ color: "rgba(148,163,184,0.8)" }}>{finding.notes}</p>
           </div>
         )}
 
         {/* Code viewer */}
         {finding.code_snippet && (
-          <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(34,211,238,0.1)" }}>
-            <div className="flex items-center justify-between px-4 py-2" style={{ background: "rgba(7,11,20,0.85)", borderBottom: "1px solid rgba(34,211,238,0.07)" }}>
-              <span className="font-mono text-xs" style={{ color: "rgba(34,211,238,0.5)" }}>CODE EVIDENCE</span>
+          <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(245,158,11,0.1)" }}>
+            <div className="flex items-center justify-between px-4 py-2" style={{ background: "rgba(7,11,20,0.85)", borderBottom: "1px solid rgba(245,158,11,0.07)" }}>
+              <span className="font-mono text-xs" style={{ color: "rgba(245,158,11,0.5)" }}>CODE EVIDENCE</span>
               <span className="font-mono text-xs truncate ml-4" style={{ color: "rgba(148,163,184,0.35)" }}>
                 {finding.file_path}:{finding.line_number}
               </span>
@@ -189,8 +189,8 @@ function DetailDrawer({ finding, onClose, triggerRef }: {
         )}
 
         {/* Migration recommendation */}
-        <div className="rounded-xl p-5" style={{ background: "rgba(34,211,238,0.03)", border: "1px solid rgba(34,211,238,0.12)" }}>
-          <div className="font-mono text-xs font-semibold tracking-widest mb-4" style={{ color: "rgba(34,211,238,0.6)" }}>
+        <div className="rounded-xl p-5" style={{ background: "rgba(245,158,11,0.03)", border: "1px solid rgba(245,158,11,0.12)" }}>
+          <div className="font-mono text-xs font-semibold tracking-widest mb-4" style={{ color: "rgba(245,158,11,0.6)" }}>
             MIGRATION RECOMMENDATION
           </div>
           <div className="flex items-center gap-3">
@@ -199,12 +199,12 @@ function DetailDrawer({ finding, onClose, triggerRef }: {
               <div className="font-mono text-xs mt-0.5" style={{ color: "rgba(148,163,184,0.4)" }}>LEGACY</div>
             </div>
             <div className="flex-1 flex flex-col items-center gap-0.5">
-              <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(239,68,68,0.4), rgba(34,211,238,0.4))" }} />
-              <div className="font-mono text-xs" style={{ color: "rgba(34,211,238,0.4)" }}>MIGRATE TO</div>
-              <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(239,68,68,0.4), rgba(34,211,238,0.4))" }} />
+              <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(239,68,68,0.4), rgba(245,158,11,0.4))" }} />
+              <div className="font-mono text-xs" style={{ color: "rgba(245,158,11,0.4)" }}>MIGRATE TO</div>
+              <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(239,68,68,0.4), rgba(245,158,11,0.4))" }} />
             </div>
-            <div className="text-center px-3 py-2 rounded-lg flex-shrink-0" style={{ background: "rgba(34,211,238,0.07)", border: "1px solid rgba(34,211,238,0.22)" }}>
-              <div className="font-mono text-sm font-semibold text-cyan-400">{finding.recommended_pqc}</div>
+            <div className="text-center px-3 py-2 rounded-lg flex-shrink-0" style={{ background: "rgba(245,158,11,0.07)", border: "1px solid rgba(245,158,11,0.22)" }}>
+              <div className="font-mono text-sm font-semibold text-amber-400">{finding.recommended_pqc}</div>
               <div className="font-mono text-xs mt-0.5" style={{ color: "rgba(148,163,184,0.4)" }}>PQC-READY</div>
             </div>
           </div>
@@ -253,7 +253,7 @@ function RiskDonut({ findings }: { findings: Finding[] }) {
   return (
     <div ref={ref} className="panel p-5 space-y-4">
       <div>
-        <div className="font-mono text-xs tracking-widest font-semibold mb-0.5" style={{ color: "rgba(34,211,238,0.6)" }}>
+        <div className="font-mono text-xs tracking-widest font-semibold mb-0.5" style={{ color: "rgba(245,158,11,0.6)" }}>
           RISK LEVEL BREAKDOWN
         </div>
         <div className="font-mono text-xs" style={{ color: "rgba(148,163,184,0.45)" }}>n = {total}</div>
@@ -348,7 +348,7 @@ function AlgoChart({ findings }: { findings: Finding[] }) {
   return (
     <div ref={ref} className="panel p-5 space-y-4">
       <div>
-        <div className="font-mono text-xs tracking-widest font-semibold mb-0.5" style={{ color: "rgba(34,211,238,0.6)" }}>ALGORITHMS DISCOVERED</div>
+        <div className="font-mono text-xs tracking-widest font-semibold mb-0.5" style={{ color: "rgba(245,158,11,0.6)" }}>ALGORITHMS DISCOVERED</div>
       </div>
       <div className="space-y-2" role="list" aria-label="Algorithm frequency">
         {stats.map((algo, i) => {
@@ -396,7 +396,7 @@ function AlgoChart({ findings }: { findings: Finding[] }) {
           );
         })}
       </div>
-      <div className="flex flex-wrap items-center gap-4 pt-2" style={{ borderTop: "1px solid rgba(34,211,238,0.07)" }}>
+      <div className="flex flex-wrap items-center gap-4 pt-2" style={{ borderTop: "1px solid rgba(245,158,11,0.07)" }}>
         <div className="flex items-center gap-1.5">
           <div className="w-2 h-2 rounded-full bg-red-400" aria-hidden="true" />
           <span className="font-mono text-xs" style={{ color: "rgba(148,163,184,0.5)" }}>Quantum vulnerable</span>
@@ -469,7 +469,7 @@ export default function CBOMSection() {
 
   return (
     <section id="cbom" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-12">
-      <div className="h-px w-full mb-10" style={{ background: "linear-gradient(90deg, transparent, rgba(34,211,238,0.2), transparent)" }} />
+      <div className="h-px w-full mb-10" style={{ background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.2), transparent)" }} />
 
       {/* Demo mode indicator */}
       {state.demoMode && (
@@ -495,7 +495,7 @@ export default function CBOMSection() {
         <p className="text-sm mb-2" style={{ color: "rgba(148,163,184,0.6)" }}>
           Every cryptographic artifact ranked by quantum exposure and remediation urgency.
         </p>
-        <div className="flex items-center gap-1.5 font-mono text-xs" style={{ color: "rgba(34,211,238,0.5)" }}>
+        <div className="flex items-center gap-1.5 font-mono text-xs" style={{ color: "rgba(245,158,11,0.5)" }}>
           <span>{report.project_name}</span>
           <span style={{ color: "rgba(148,163,184,0.3)" }}>·</span>
           <span>{fileCount} files</span>
@@ -512,7 +512,7 @@ export default function CBOMSection() {
         transition={{ duration: 0.4, delay: 0.08 }}
         className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-7"
       >
-        <StatTile label="Total assets" value={summary.total_artifacts} sub={`across ${fileCount} files`} color="#22D3EE" />
+        <StatTile label="Total assets" value={summary.total_artifacts} sub={`across ${fileCount} files`} color="#F59E0B" />
         <StatTile label="Quantum vulnerable" value={summary.vulnerable_count} sub="broken by Shor's / Grover's" color="#F97316" />
         <StatTile label="Critical" value={summary.critical_count} sub="immediate remediation" color="#EF4444" />
         <StatTile label="High risk" value={summary.high_count} sub="schedule this quarter" color="#F59E0B" />
@@ -530,9 +530,9 @@ export default function CBOMSection() {
         {/* Search */}
         <div
           className="flex items-center gap-2 px-3 py-2 rounded-xl flex-1 min-w-48"
-          style={{ background: "rgba(11,18,32,0.8)", border: "1px solid rgba(34,211,238,0.12)" }}
+          style={{ background: "rgba(11,18,32,0.8)", border: "1px solid rgba(245,158,11,0.12)" }}
         >
-          <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "rgba(34,211,238,0.4)" }}>
+          <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: "rgba(245,158,11,0.4)" }}>
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
           <input
@@ -551,8 +551,8 @@ export default function CBOMSection() {
           id="risk-filter"
           value={riskFilter}
           onChange={(e) => setRiskFilter(e.target.value)}
-          className="font-mono text-xs px-3 py-2 rounded-xl outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-400"
-          style={{ background: "rgba(11,18,32,0.9)", border: "1px solid rgba(34,211,238,0.12)", color: "#E2E8F0" }}
+          className="font-mono text-xs px-3 py-2 rounded-xl outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-400"
+          style={{ background: "rgba(11,18,32,0.9)", border: "1px solid rgba(245,158,11,0.12)", color: "#E2E8F0" }}
           aria-label="Filter by risk"
         >
           <option value="All">All risks</option>
@@ -564,8 +564,8 @@ export default function CBOMSection() {
           id="lang-filter"
           value={langFilter}
           onChange={(e) => setLangFilter(e.target.value)}
-          className="font-mono text-xs px-3 py-2 rounded-xl outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-cyan-400"
-          style={{ background: "rgba(11,18,32,0.9)", border: "1px solid rgba(34,211,238,0.12)", color: "#E2E8F0" }}
+          className="font-mono text-xs px-3 py-2 rounded-xl outline-none cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-400"
+          style={{ background: "rgba(11,18,32,0.9)", border: "1px solid rgba(245,158,11,0.12)", color: "#E2E8F0" }}
           aria-label="Filter by language"
         >
           <option value="All">All languages</option>
@@ -575,17 +575,17 @@ export default function CBOMSection() {
         <button
           onClick={() => setQvOnly(!qvOnly)}
           aria-pressed={qvOnly}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl font-mono text-xs transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          className="flex items-center gap-2 px-3 py-2 rounded-xl font-mono text-xs transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
           style={{
             background: qvOnly ? "rgba(239,68,68,0.1)" : "rgba(11,18,32,0.9)",
-            border: qvOnly ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(34,211,238,0.12)",
+            border: qvOnly ? "1px solid rgba(239,68,68,0.4)" : "1px solid rgba(245,158,11,0.12)",
             color: qvOnly ? "#EF4444" : "rgba(148,163,184,0.6)",
           }}
         >
           ◈ Quantum only
         </button>
 
-        <div className="ml-auto font-mono text-xs" style={{ color: "rgba(34,211,238,0.5)" }} aria-live="polite" aria-atomic="true">
+        <div className="ml-auto font-mono text-xs" style={{ color: "rgba(245,158,11,0.5)" }} aria-live="polite" aria-atomic="true">
           {filtered.length} / {report.findings.length}
         </div>
       </motion.div>
@@ -597,7 +597,7 @@ export default function CBOMSection() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.15 }}
         className="rounded-2xl overflow-hidden mb-7 hidden md:block"
-        style={{ background: "rgba(11,18,32,0.7)", border: "1px solid rgba(34,211,238,0.09)" }}
+        style={{ background: "rgba(11,18,32,0.7)", border: "1px solid rgba(245,158,11,0.09)" }}
         role="table"
         aria-label="CBOM findings"
       >
@@ -606,8 +606,8 @@ export default function CBOMSection() {
           style={{
             gridTemplateColumns: "100px 130px 76px 1fr 52px 100px 64px 130px 1fr",
             background: "rgba(7,11,20,0.6)",
-            borderBottom: "1px solid rgba(34,211,238,0.07)",
-            color: "rgba(34,211,238,0.5)",
+            borderBottom: "1px solid rgba(245,158,11,0.07)",
+            color: "rgba(245,158,11,0.5)",
           }}
           role="row"
         >
@@ -632,17 +632,17 @@ export default function CBOMSection() {
                 key={rowKey}
                 ref={(el) => { if (el) triggerRefs.current.set(rowKey, el); }}
                 onClick={() => openFinding(f, rowKey)}
-                className="grid w-full text-left transition-colors duration-100 focus:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="grid w-full text-left transition-colors duration-100 focus:outline-none focus-visible:ring-inset focus-visible:ring-2 focus-visible:ring-amber-400"
                 style={{
                   gridTemplateColumns: "100px 130px 76px 1fr 52px 100px 64px 130px 1fr",
                   padding: "10px 16px",
-                  borderBottom: "1px solid rgba(34,211,238,0.05)",
+                  borderBottom: "1px solid rgba(245,158,11,0.05)",
                   alignItems: "center",
                   cursor: "pointer",
                   background: "transparent",
                   border: "none",
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(34,211,238,0.03)"; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(245,158,11,0.03)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
                 role="row"
                 aria-label={`${f.algorithm} in ${f.file_path}, ${f.risk_level} risk`}
@@ -671,7 +671,7 @@ export default function CBOMSection() {
                 <div>
                   <span
                     className="font-mono text-xs px-2 py-0.5 rounded truncate inline-block max-w-full"
-                    style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.14)", color: "#22D3EE" }}
+                    style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.14)", color: "#F59E0B" }}
                     title={f.recommended_pqc}
                   >
                     {f.recommended_pqc}
@@ -699,7 +699,7 @@ export default function CBOMSection() {
               key={rowKey}
               ref={(el) => { if (el) triggerRefs.current.set(rowKey, el as HTMLButtonElement); }}
               onClick={() => openFinding(f, rowKey)}
-              className="w-full text-left rounded-xl p-4 space-y-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+              className="w-full text-left rounded-xl p-4 space-y-2 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
               style={{ background: "rgba(11,18,32,0.8)", border: `1px solid ${rc.border}` }}
             >
               <div className="flex items-center justify-between">
@@ -710,8 +710,8 @@ export default function CBOMSection() {
               <div className="flex items-center gap-2 flex-wrap">
                 <span style={{ color: qi.color, fontSize: "11px" }} className="font-mono">{qi.symbol} {qi.label}</span>
               </div>
-              <div className="font-mono text-xs" style={{ color: "#22D3EE" }}>→ {f.recommended_pqc}</div>
-              <div className="font-mono text-xs text-right" style={{ color: "rgba(34,211,238,0.4)" }}>VIEW DETAILS →</div>
+              <div className="font-mono text-xs" style={{ color: "#F59E0B" }}>→ {f.recommended_pqc}</div>
+              <div className="font-mono text-xs text-right" style={{ color: "rgba(245,158,11,0.4)" }}>VIEW DETAILS →</div>
             </button>
           );
         })}

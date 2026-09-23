@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, useInView, animate, AnimatePresence } from "framer-motion";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, ReferenceLine, Tooltip as RechartsTooltip } from "recharts";
 import { calculateMosca } from "../api";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import type { MOSCAResponse } from "../types";
-
 // ─── Animated number ──────────────────────────────────────────────────────────
 
 function AnimatedNumber({
@@ -153,7 +153,7 @@ function ThreatGauge({
 
   return (
     <div ref={ref} className="flex flex-col items-center gap-3">
-      <div className="font-mono text-xs tracking-widest" style={{ color: "rgba(34,211,238,0.6)" }}>
+      <div className="font-mono text-xs tracking-widest" style={{ color: "rgba(245,158,11,0.6)" }}>
         THREAT RATIO (x+y)/z
       </div>
       <div className="relative">
@@ -193,36 +193,41 @@ function ThreatTimeline({
 }: {
   x: number; y: number; z: number; isAtRisk: boolean;
 }) {
-  const reduced = useReducedMotion();
-  const total = Math.max(x + y, z) + 4;
-
-  const Bar = ({ label, value, color, delay }: { label: string; value: number; color: string; delay: number }) => (
-    <div className="flex items-center gap-3">
-      <div className="w-28 sm:w-36 font-mono text-xs text-right flex-shrink-0" style={{ color: "rgba(148,163,184,0.6)" }}>
-        {label}
-      </div>
-      <div className="flex-1 h-6 rounded overflow-hidden relative" style={{ background: "rgba(148,163,184,0.06)" }}>
-        <motion.div
-          className="h-full rounded flex items-center px-2"
-          initial={{ width: 0 }}
-          animate={{ width: `${Math.min((value / total) * 100, 100)}%` }}
-          transition={{ duration: reduced ? 0 : 0.8, delay, ease: "easeOut" }}
-          style={{ background: `linear-gradient(90deg, ${color}80, ${color}cc)`, boxShadow: `0 0 8px ${color}40` }}
-        >
-          <span className="font-mono text-xs text-white font-semibold whitespace-nowrap">{value}y</span>
-        </motion.div>
-      </div>
-    </div>
-  );
+  const chartData = Array.from({ length: Math.max(x + y, z) + 5 }, (_, i) => ({
+    year: i,
+    "Time Elapsed": i,
+    "Q-Day": z,
+    "Migration Complete": x + y,
+  }));
 
   return (
     <div className="panel p-5 space-y-3">
-      <div className="font-mono text-xs font-semibold tracking-widest mb-3" style={{ color: "rgba(34,211,238,0.6)" }}>
-        THREAT TIMELINE
+      <div className="font-mono text-xs font-semibold tracking-widest mb-3 flex items-center justify-between" style={{ color: "rgba(245,158,11,0.6)" }}>
+        <span>MOSCA THEOREM (x+y vs z)</span>
+        <span className={isAtRisk ? "text-red-400" : "text-green-400"}>
+          {isAtRisk ? "VULNERABLE" : "SAFE"}
+        </span>
       </div>
-      <Bar label="DATA SHELF LIFE" value={x} color="#22D3EE" delay={0} />
-      <Bar label="MIGRATION WINDOW" value={y} color="#8B5CF6" delay={0.1} />
-      <Bar label="Q-DAY ESTIMATE" value={z} color="#F97316" delay={0.2} />
+      
+      <div className="h-48 w-full mt-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: -20 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+            <XAxis dataKey="year" stroke="rgba(255,255,255,0.2)" fontSize={10} tickFormatter={(val) => `Y${val}`} />
+            <YAxis stroke="rgba(255,255,255,0.2)" fontSize={10} />
+            <RechartsTooltip 
+              contentStyle={{ backgroundColor: "rgba(11,18,32,0.9)", border: "1px solid rgba(245,158,11,0.2)", borderRadius: "8px", fontSize: "12px", fontFamily: "monospace" }}
+              itemStyle={{ color: "#E2E8F0" }}
+            />
+            <ReferenceLine x={z} stroke="#F97316" strokeDasharray="3 3" label={{ position: 'top', value: 'Q-Day', fill: '#F97316', fontSize: 10 }} />
+            <ReferenceLine x={x + y} stroke="#F59E0B" strokeDasharray="3 3" label={{ position: 'top', value: 'Data Safe', fill: '#F59E0B', fontSize: 10 }} />
+            <Line type="monotone" dataKey="Time Elapsed" stroke="#10B981" strokeWidth={2} dot={false} />
+            {isAtRisk && (
+              <ReferenceLine x={z} stroke="#EF4444" strokeWidth={2} />
+            )}
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
 
       <AnimatePresence mode="wait">
         {isAtRisk ? (
@@ -321,7 +326,7 @@ export default function MoscaSection() {
 
   return (
     <section id="mosca" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-14">
-      <div className="h-px w-full mb-10" style={{ background: "linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent)" }} />
+      <div className="h-px w-full mb-10" style={{ background: "linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent)" }} />
 
       <motion.div
         initial={{ opacity: 0, y: reduced ? 0 : 22 }}
@@ -330,7 +335,7 @@ export default function MoscaSection() {
         transition={{ duration: 0.6 }}
         className="mb-8"
       >
-        <h2 className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(139,92,246,0.7)" }}>
+        <h2 className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(16,185,129,0.7)" }}>
           QUANTUM THREAT ANALYSIS
         </h2>
         <p className="text-2xl font-semibold text-white">Mosca's Theorem</p>
@@ -339,12 +344,12 @@ export default function MoscaSection() {
         </p>
         <div
           className="mt-5 inline-flex items-center gap-3 px-5 py-3 rounded-2xl"
-          style={{ background: "rgba(139,92,246,0.06)", border: "1px solid rgba(139,92,246,0.2)" }}
+          style={{ background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.2)" }}
         >
-          <div className="font-mono text-2xl font-bold text-violet-400">x + y &gt; z</div>
+          <div className="font-mono text-2xl font-bold text-green-400">x + y &gt; z</div>
           <div className="font-mono text-xs flex flex-wrap gap-3" style={{ color: "rgba(148,163,184,0.6)" }}>
-            <span><span className="text-cyan-400">x</span> = Data Shelf Life</span>
-            <span><span className="text-violet-400">y</span> = Migration Time</span>
+            <span><span className="text-amber-400">x</span> = Data Shelf Life</span>
+            <span><span className="text-green-400">y</span> = Migration Time</span>
             <span><span className="text-orange-400">z</span> = Q-Day Timeline</span>
           </div>
         </div>
@@ -364,10 +369,10 @@ export default function MoscaSection() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="panel p-6"
         >
-          <div className="font-mono text-xs tracking-widest mb-5" style={{ color: "rgba(34,211,238,0.6)" }}>SIMULATOR CONTROLS</div>
+          <div className="font-mono text-xs tracking-widest mb-5" style={{ color: "rgba(245,158,11,0.6)" }}>SIMULATOR CONTROLS</div>
           <div className="space-y-7">
-            <ArcGauge value={x} max={30} color="#22D3EE" label="DATA SHELF LIFE" unit="years" description="How long must your data remain secret?" onChange={(v) => { setX(v); }} />
-            <ArcGauge value={y} max={20} color="#8B5CF6" label="MIGRATION TIME" unit="years" description="Time to complete PQC migration" onChange={(v) => { setY(v); }} />
+            <ArcGauge value={x} max={30} color="#F59E0B" label="DATA SHELF LIFE" unit="years" description="How long must your data remain secret?" onChange={(v) => { setX(v); }} />
+            <ArcGauge value={y} max={20} color="#10B981" label="MIGRATION TIME" unit="years" description="Time to complete PQC migration" onChange={(v) => { setY(v); }} />
             <ArcGauge value={z} max={30} color="#F97316" label="Q-DAY ESTIMATE" unit="years" description="Years until cryptographically-relevant quantum computer" onChange={(v) => { setZ(v); }} />
           </div>
         </motion.div>
@@ -382,8 +387,8 @@ export default function MoscaSection() {
         >
           <div className="panel p-6">
             {loading && (
-              <div className="flex items-center justify-center gap-2 mb-4 font-mono text-xs" style={{ color: "rgba(34,211,238,0.5)" }}>
-                <span className="w-3 h-3 rounded-full border border-cyan-400 border-t-transparent animate-spin" />
+              <div className="flex items-center justify-center gap-2 mb-4 font-mono text-xs" style={{ color: "rgba(245,158,11,0.5)" }}>
+                <span className="w-3 h-3 rounded-full border border-amber-400 border-t-transparent animate-spin" />
                 CALCULATING…
               </div>
             )}
@@ -394,16 +399,16 @@ export default function MoscaSection() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="mt-4 rounded-xl p-3"
-                style={{ background: "rgba(11,18,32,0.6)", border: "1px solid rgba(34,211,238,0.07)" }}
+                style={{ background: "rgba(11,18,32,0.6)", border: "1px solid rgba(245,158,11,0.07)" }}
               >
-                <div className="font-mono text-xs mb-1" style={{ color: "rgba(34,211,238,0.45)" }}>RECOMMENDATION</div>
+                <div className="font-mono text-xs mb-1" style={{ color: "rgba(245,158,11,0.45)" }}>RECOMMENDATION</div>
                 <p className="text-sm" style={{ color: "rgba(148,163,184,0.8)" }}>{moscaResult.recommendation}</p>
               </motion.div>
             )}
 
-            <div className="grid grid-cols-3 gap-3 mt-4 pt-4" style={{ borderTop: "1px solid rgba(34,211,238,0.07)" }}>
+            <div className="grid grid-cols-3 gap-3 mt-4 pt-4" style={{ borderTop: "1px solid rgba(245,158,11,0.07)" }}>
               {[
-                { label: "x + y", value: `${x + y}y`, color: "#22D3EE" },
+                { label: "x + y", value: `${x + y}y`, color: "#F59E0B" },
                 { label: "vs", value: "vs", color: "rgba(148,163,184,0.4)" },
                 { label: "Q-Day (z)", value: `${z}y`, color: "#F97316" },
               ].map((item) => (

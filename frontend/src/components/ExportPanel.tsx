@@ -97,11 +97,11 @@ function buildHTMLReport(report: CBOMReport): string {
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'Segoe UI',system-ui,sans-serif;background:#070B14;color:#E2E8F0;padding:40px 24px}
-  h1{font-size:1.8rem;color:#22D3EE;margin-bottom:4px}
+  h1{font-size:1.8rem;color:#F59E0B;margin-bottom:4px}
   .sub{color:#64748B;font-size:0.9rem;margin-bottom:32px}
   .stats{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:40px}
   .stat{background:#0F1B2D;border:1px solid #1E3A5F;border-radius:12px;padding:16px 24px;min-width:120px;text-align:center}
-  .stat-val{font-size:2rem;font-weight:700;color:#22D3EE}
+  .stat-val{font-size:2rem;font-weight:700;color:#F59E0B}
   .stat-label{font-size:0.75rem;color:#64748B;margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
   table{width:100%;border-collapse:collapse;font-size:0.82rem}
   th{background:#0F1B2D;padding:10px 12px;text-align:left;color:#64748B;text-transform:uppercase;letter-spacing:.05em;font-size:.72rem;border-bottom:1px solid #1E3A5F}
@@ -119,7 +119,7 @@ function buildHTMLReport(report: CBOMReport): string {
   <div class="stat"><div class="stat-val" style="color:#F97316">${report.summary.high_count}</div><div class="stat-label">High</div></div>
   <div class="stat"><div class="stat-val" style="color:#F59E0B">${report.summary.medium_count}</div><div class="stat-label">Medium</div></div>
   <div class="stat"><div class="stat-val" style="color:#10B981">${report.summary.safe_count}</div><div class="stat-label">Safe</div></div>
-  <div class="stat"><div class="stat-val" style="color:#8B5CF6">${report.summary.vulnerable_count}</div><div class="stat-label">Quantum Vulnerable</div></div>
+  <div class="stat"><div class="stat-val" style="color:#10B981">${report.summary.vulnerable_count}</div><div class="stat-label">Quantum Vulnerable</div></div>
 </div>
 <table>
 <thead><tr><th>Location</th><th>Algorithm</th><th>Key Size</th><th>Language</th><th>Risk</th><th>Quantum Impact</th><th>Recommended PQC</th></tr></thead>
@@ -258,7 +258,7 @@ export default function ExportPanel() {
       subtitle: "Industry-standard SBOM format",
       description: "Machine-readable CBOM in CycloneDX v1.6 schema. Compatible with OWASP Dependency-Track and enterprise security platforms.",
       icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>,
-      color: "#22D3EE",
+      color: "#F59E0B",
       badge: "STANDARD",
       onExport: async () => {
         if (!report) return;
@@ -272,7 +272,7 @@ export default function ExportPanel() {
       subtitle: "Complete artifact manifest",
       description: "Full CBOM data with all cryptographic findings, risk classifications, and PQC recommendations.",
       icon: <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>,
-      color: "#8B5CF6",
+      color: "#10B981",
       badge: "JSON",
       onExport: async () => {
         if (!report) return;
@@ -309,7 +309,7 @@ export default function ExportPanel() {
 
   return (
     <section id="export" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-14">
-      <div className="h-px w-full mb-10" style={{ background: "linear-gradient(90deg, transparent, rgba(139,92,246,0.3), transparent)" }} />
+      <div className="h-px w-full mb-10" style={{ background: "linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent)" }} />
 
       <motion.div
         initial={{ opacity: 0, y: reduced ? 0 : 22 }}
@@ -318,7 +318,7 @@ export default function ExportPanel() {
         transition={{ duration: 0.6 }}
         className="mb-8"
       >
-        <h2 className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(139,92,246,0.7)" }}>EXPORT</h2>
+        <h2 className="font-mono text-xs tracking-widest mb-1" style={{ color: "rgba(16,185,129,0.7)" }}>EXPORT</h2>
         <p className="text-2xl font-semibold text-white">Download Your CBOM Report</p>
 
         {!report && (
@@ -350,9 +350,9 @@ export default function ExportPanel() {
           >
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
               {[
-                { label: "Total Artifacts", value: report.summary.total_artifacts, color: "#22D3EE" },
+                { label: "Total Artifacts", value: report.summary.total_artifacts, color: "#F59E0B" },
                 { label: "Critical", value: report.summary.critical_count, color: "#EF4444" },
-                { label: "Quantum Vulnerable", value: report.summary.vulnerable_count, color: "#8B5CF6" },
+                { label: "Quantum Vulnerable", value: report.summary.vulnerable_count, color: "#10B981" },
                 { label: "Safe", value: report.summary.safe_count, color: "#10B981" },
               ].map((s) => (
                 <div key={s.label} className="panel p-4 text-center">
