@@ -5,6 +5,7 @@ import { scanRepo, scanUpload } from "../api";
 import { useAppState } from "../context/AppContext";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import type { ScanMode } from "../types";
+import QuantumCore3D from "./QuantumCore3D";
 
 const SCAN_PHASES = [
   "INITIALIZING ANALYSIS",
@@ -46,7 +47,7 @@ function ShieldIcon() {
 }
 
 export default function Hero() {
-  const { startScan, completeScan, failScan, enableDemoMode, state } = useAppState();
+  const { startScan, completeScan, failScan, enableDemoMode, disableDemoMode, state } = useAppState();
   const reduced = useReducedMotion();
 
   const [scanMode, setScanMode] = useState<ScanMode>("repository");
@@ -171,17 +172,13 @@ export default function Hero() {
     setLocalLogs([`→ Scan initiated (${scanMode === "repository" ? repoInput.trim() : selectedFile!.name})`]);
     setPhaseIndex(0);
 
+    disableDemoMode(); // Turn off demo mode to run real scan!
+
     try {
       let report: any;
-      if (state.demoMode) {
-        // In demo mode, bypass actual API call
-        await new Promise(resolve => setTimeout(resolve, 2000)); // simulate delay
-        report = state.report;
-      } else {
-        report = scanMode === "repository"
-          ? await scanRepo(repoInput.trim(), abortRef.current.signal)
-          : await scanUpload(selectedFile!, abortRef.current.signal);
-      }
+      report = scanMode === "repository"
+        ? await scanRepo(repoInput.trim(), abortRef.current.signal)
+        : await scanUpload(selectedFile!, abortRef.current.signal);
 
       setLocalLogs((prev) => [
         ...prev,
@@ -663,25 +660,17 @@ export default function Hero() {
                   className="font-bold leading-none tracking-wider"
                   style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.2rem)", letterSpacing: "0.08em", color: "#F1F5F9" }}
                 >
-                  CBOM SENTINEL
+                  AEGIS-Q
                 </h1>
                 <p className="text-sm mt-1.5" style={{ color: "rgba(148,163,184,0.6)" }}>
-                  Cryptographic Bill of Materials & PQC Risk Engine
+                  Quantum Migration Intelligence & Risk Engine
                 </p>
               </div>
             </div>
 
-            <p className="text-xl font-light mt-6 leading-relaxed" style={{ color: "rgba(226,232,240,0.85)" }}>
-              Find the cryptography that won't survive the{" "}
-              <span className="font-semibold" style={{ color: "#F59E0B", textShadow: "0 0 18px rgba(245,158,11,0.35)" }}>
-                quantum era
-              </span>
-              .
-            </p>
-            <p className="mt-3 text-sm leading-relaxed" style={{ color: "rgba(148,163,184,0.55)" }}>
-              Discover vulnerable cryptographic assets across your codebase, evaluate quantum risk
-              with Mosca's Theorem, and generate a migration roadmap aligned with NIST FIPS 203/204/205.
-            </p>
+            <div className="mt-6 mb-6">
+              <QuantumCore3D />
+            </div>
           </div>
 
           {/* System status */}

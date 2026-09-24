@@ -17,7 +17,7 @@ from cbom.risk_engine.mosca_calculator import calculate_mosca_risk
 from cbom.recommender.pqc_mapper import get_pqc_migration_path, NIST_PQC_STANDARDS
 
 app = FastAPI(
-    title="CBOM Sentinel API",
+    title="AEGIS-Q API",
     description="Automated Cryptographic Bill of Materials Discovery & Post-Quantum Cryptography Risk Assessment API",
     version="1.0.0"
 )
@@ -33,12 +33,12 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"message": "CBOM Sentinel API online", "version": "1.0.0"}
+    return {"message": "AEGIS-Q API online", "version": "1.0.0"}
 
 
 @app.get("/api/health")
 def health_check():
-    return {"status": "ok", "message": "CBOM Sentinel API online"}
+    return {"status": "ok", "message": "AEGIS-Q API online"}
 
 
 @app.get("/api/v1/scan", response_model=CBOMReport)

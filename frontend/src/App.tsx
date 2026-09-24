@@ -10,16 +10,19 @@ import PQCRoadmap from "./components/PQCRoadmap";
 import ExportPanel from "./components/ExportPanel";
 
 function AppContent() {
-  const { state, dispatch } = useAppState();
+  const { state, dispatch, enableDemoMode } = useAppState();
 
   useEffect(() => {
     checkBackendHealth()
       .then((online) => dispatch({ type: "SET_BACKEND_STATUS", status: online ? "online" : "offline" }))
       .catch(() => dispatch({ type: "SET_BACKEND_STATUS", status: "offline" }));
-  }, [dispatch]);
+      
+    // Auto-enable demo mode for immediate dashboard view
+    enableDemoMode();
+  }, [dispatch, enableDemoMode]);
 
   return (
-    <div className="relative min-h-screen" style={{ background: "#070B14" }}>
+    <div className="relative min-h-screen" style={{ background: "#0B1120" }}>
       <Background />
       <StickyNav />
       <div className="relative z-10">
